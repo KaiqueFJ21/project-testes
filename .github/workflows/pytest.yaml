@@ -44,7 +44,7 @@ jobs:
         username: ${{ secrets.email }}
         password: ${{ secrets.senhaemail }}
         subject: "Termo de Aceite Técnico"
-        to: gustavo.luz@prof.uniso.br
+        to: floreskaique@outlook.com.br
         from: "GitHub Actions"
         body: "Segue o relatório para aprovação."
         attachments: termo_de_aceite.html
