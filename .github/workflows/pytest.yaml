@@ -1,0 +1,49 @@
+name: Testes Automatizados
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v4
+
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Instalar dependências
+      run: |
+        pip install pytest jinja2
+
+    - name: Executar testes
+      run: |
+        python -m pytest --junitxml=resultado_testes.xml
+
+    - name: Gerar relatório HTML
+      run: |
+        python gera_relatorio.py
+
+    - name: Salvar artefato
+      uses: actions/upload-artifact@v4
+      with:
+        name: termo-aceite
+        path: termo_de_aceite.html
+
+    - name: Enviar email
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        username: ${{ secrets.email }}
+        password: ${{ secrets.senhaemail }}
+        subject: "Termo de Aceite Técnico"
+        to: gustavo.luz@prof.uniso.br
+        from: "GitHub Actions"
+        body: "Segue o relatório para aprovação."
+        attachments: termo_de_aceite.html
